@@ -7,25 +7,25 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @RestController
-@RequestMapping("/api/v0")
+@RequestMapping("/api/v0/clientes")
 class ClienteV0Controller(val clienteRepository: ClienteRepository) {
 
-    @PostMapping(name="/clientes")
+    @PostMapping()
     fun add(@RequestBody cliente: Cliente): Cliente {
         return clienteRepository.save(cliente)
     }
 
-    @GetMapping(name="/clientes/{id}")
+    @GetMapping(name="/{id}")
     fun getOne(@PathVariable id: Long): Cliente {
         return clienteRepository.findById(id).get()
     }
 
-    @GetMapping(name="/clientes/nome/{nome}")
+    @GetMapping(name="/nome/{nome}")
     fun getByNome(@PathVariable nome: String): List<Cliente> {
         return clienteRepository.findByNome(nome)
     }
 
-    @GetMapping(name="/clientes/busca_nome_e_data_nasc")
+    @GetMapping(name="/busca_nome_e_data_nasc")
     fun getByNomeAndDataNasc(
         @RequestParam nome: String,
         @RequestParam dataNasc: String
@@ -36,7 +36,7 @@ class ClienteV0Controller(val clienteRepository: ClienteRepository) {
         return clienteRepository.findByNomeAndDataNasc(nome, dataNascimento)
     }
 
-    @PutMapping(name="/clientes")
+    @PutMapping()
     fun update(@RequestBody cliente: Cliente): Cliente {
         val existe: Boolean = clienteRepository.findById(cliente.id).isPresent
         if (existe) {
@@ -45,7 +45,7 @@ class ClienteV0Controller(val clienteRepository: ClienteRepository) {
         return cliente
     }
 
-    @DeleteMapping(name="/clientes/{id}")
+    @DeleteMapping(name="/{id}")
     fun delete(@PathVariable id: Long): Boolean {
         val cliente = clienteRepository.findById(id)
         if (!cliente.isPresent) {

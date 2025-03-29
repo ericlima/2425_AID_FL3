@@ -9,12 +9,10 @@ import pt.ipcb.ad.ficha3.service.ClienteRepository
 import java.util.*
 
 @RestController
-@RequestMapping("/api/v1")
-class ClientesV1Controller(
-    val clienteRepository: ClienteRepository
-) {
+@RequestMapping("/api/v1/clientes")
+class ClientesV1Controller(val clienteRepository: ClienteRepository) {
 
-    @GetMapping("/clientes/{id}")
+    @GetMapping("/{id}")
     fun getOne(@PathVariable id: Long): ResponseEntity<Cliente> {
         val cliente: Optional<Cliente> = clienteRepository.findById(id)
 
@@ -25,7 +23,7 @@ class ClientesV1Controller(
         }
     }
 
-    @GetMapping("/clientes")
+    @GetMapping()
     fun getAll(): ResponseEntity<List<Cliente>> {
         val clientes = clienteRepository.findAll()
         return if (clientes.isEmpty()) {
@@ -35,13 +33,13 @@ class ClientesV1Controller(
         }
     }
 
-    @PostMapping(name="/clientes")
+    @PostMapping()
     fun add(@RequestBody cliente: Cliente): ResponseEntity<Cliente> {
         val clienteAdded: Cliente = clienteRepository.save(cliente)
         return ResponseEntity.ok(clienteAdded)
     }
 
-    @PutMapping(name="/clientes")
+    @PutMapping()
     fun update(@RequestBody cliente: Cliente): ResponseEntity<Cliente> {
         val clienteExists: Boolean = clienteRepository.findById(cliente.id).isPresent
         if (clienteExists) {
@@ -52,7 +50,7 @@ class ClientesV1Controller(
         }
     }
 
-    @PatchMapping("/clientes/{id}")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun updateClienteName(
         @PathVariable clienteId: Long,
@@ -68,8 +66,4 @@ class ClientesV1Controller(
             ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado")
         }
     }
-
-
-
-
 }
